@@ -1,0 +1,36 @@
+# Symfony
+/web/bundles/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/config/parameters.yml
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/app/phpunit.xml
+/build/
+/vendor/
+/bin/
+/composer.phar
+
+# Project
+/.idea
+/.sass-cache
+/node_modules
+/src/AppBundle/Resources/public/css
+/src/AppBundle/Resources/public/js
+/web/assets/js
+/web/assets/css
+/bower_components
+/web/web.config
+/behat.yml
+/nbproject
+
+# Misc.
+.DS_Store
+.php_cs.cache
+/npm-debug.log
+
+#vm
+Vagrantfile
+ansible
+
