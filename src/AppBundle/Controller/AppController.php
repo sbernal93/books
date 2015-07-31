@@ -19,8 +19,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AppController extends Controller
 {
+
+
     /**
-     * @Route("/find")
+     * @Route("/", method={"GET"})
+     *
+     */
+    public function homepageAction()
+    {
+
+    }
+
+    /**
+     * @Route("/find", method={"POST"})
      *
      * @return JsonResponse
      */
@@ -30,7 +41,7 @@ class AppController extends Controller
     }
 
     /**
-     * @Route("/upload")
+     * @Route("/upload", method={"POST"})
      *
      * @return JsonResponse
      */
@@ -40,7 +51,7 @@ class AppController extends Controller
     }
 
     /**
-     * @Route("/download")
+     * @Route("/download", method={"POST"})
      *
      * @return JsonResponse
      */
