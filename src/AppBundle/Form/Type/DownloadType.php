@@ -21,12 +21,11 @@ class DownloadType extends AbstractType
 
     protected $files;
 
-    protected $app;
 
-    public function __construct($files, $app)
+    public function __construct($files)
     {
         $this->files=$files;
-        $this->app = $app;
+
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -40,7 +39,7 @@ class DownloadType extends AbstractType
         ;*/
         $builder
             ->add('files', 'choice', [
-                'choices' => ['Files' => $this->files],
+                'choices' => ['Files' => 'asd'],
                 'label' => 'Files',
             ])
             ->add('download', 'submit', ['label' => 'Descargar'])

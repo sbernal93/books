@@ -23,13 +23,13 @@ class FindType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('isbn', null, [
+                ->add('isbn', 'text', [
                     'label' => 'ISBN',
-                    'constraints' => new Constraints\NotBlank(['message' => 'El campo ISBN es obligatorio']),
+                    'constraints' => new Constraints\NotBlank(['message' => 'El campo ISBN es obligatorio'])
                     ])
                 ->add('api', 'choice', [
-                    'choices' => ['APis' => $this->apis],
-                    'label' => 'Api',
+                    'choices' => ['APis' => 'asd'],
+                    'label' => 'Api'
                 ])
                 ->add('search', 'submit', ['label' => 'Buscar']);
     }
