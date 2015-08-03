@@ -1,3 +1,21 @@
 app:
-    resource: "@AppBundle/Controller/"
+    resource: @AppBundle/Controller/
     type:     annotation
+
+homepage:
+    path: /
+    defaults:
+        _controller: @AppBundle/Controller/AppController
+        template: 'books/index.html.twig'
+
+find:
+    path:   /find
+    defaults: { _controller: @AppBundle/Controller/AppController }
+
+upload:
+    path:   /upload
+    defaults: { _controller: @AppBundle/Controller/AppController }
+
+download:
+    path: /download
+    defaults: { _controller: @AppBundle/Controller/AppController }
