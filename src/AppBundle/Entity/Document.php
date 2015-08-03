@@ -10,6 +10,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="documents")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\DocumentsRepository)
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\DocumentsRepository")
  * @UniqueEntity("name")
  */
 class Document
@@ -26,24 +27,24 @@ class Document
     /**
      * @ORM\Column(name="doc_id", type="integer")
      * @ORM\id
-     * @ORM\GenerateValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="doc_name", type="string", length="80", nullable=false)
+     * @ORM\Column(name="doc_name", type="string", length=80, nullable=false)
      *
      * @var string
      */
     protected $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="linio_books")
+     * @ORM\ManyToMany(targetEntity="Book")
      * @ORM\JoinTable(name="lb_doc",
-     *                  joinColumns={@ORM\JoinColumns(name="doc_id_fk", referencedColumnName="doc_id")},
-     *                  inverseJoinColumns={@ORM\JoinColumns(name="lb_id_fk", referencedColumnName="lb_id")}
+     *                  joinColumns={@ORM\JoinColumn(name="doc_id_fk", referencedColumnName="doc_id")},
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="lb_id")}
      *               )
      *
      * @var array

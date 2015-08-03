@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class Api
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="books_api")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\ApiRepository)
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\ApiRepository")
  * @UniqueEntity("name")
  */
 class Api
@@ -24,27 +25,27 @@ class Api
     /**
      * @ORM\Column(name="BA_id", type="integer")
      * @ORM\id
-     * @ORM\GenerateValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="BA_name", type="string", length="60")
+     * @ORM\Column(name="BA_name", type="string", length=60)
      *
      * @var string
      */
     protected $name;
 
     /**
-     * @ORM\Column(name="BA_key", type="string", length="50")
+     * @ORM\Column(name="BA_key", type="string", length=50)
      *
      * @var string
      */
     protected $key;
 
     /**
-     * @ORM\Column(name="BA_classname", type="string", length="30")
+     * @ORM\Column(name="BA_classname", type="string", length=30)
      *
      * @var string
      */

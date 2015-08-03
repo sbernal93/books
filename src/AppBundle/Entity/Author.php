@@ -10,6 +10,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class Author
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="author")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\AuthorRepository)
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\AuthorRepository")
  * @UniqueEntity("name")
  */
 class Author
@@ -25,21 +26,21 @@ class Author
     /**
      * @ORM\Column(name="LB_id", type="integer")
      * @ORM\id
-     * @ORM\GenerateValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="auth_name", type="string", length="80", nullable=false)
+     * @ORM\Column(name="auth_name", type="string", length=80, nullable=false)
      *
      * @var string
      */
     protected $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="linio_books", mappedBy="books")
+     * @ORM\ManyToMany(targetEntity="Book", mappedBy="books")
      *
      * @var array
      */

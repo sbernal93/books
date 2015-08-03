@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="linio_books")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\BookRepository)
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\BookRepository")
  * @UniqueEntity("isbn10")
  * @UniqueEntity("isbn13")
  *
@@ -28,63 +28,63 @@ class Book
     /**
      * @ORM\Column(name="LB_id", type="integer")
      * @ORM\id
-     * @ORM\GenerateValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int
      */
     protected $id;
     /**
-     * @ORM\Column(name="LB_isbnTen", type="string", length="11", nullable=false)
+     * @ORM\Column(name="LB_isbnTen", type="string", length=11, nullable=false)
      *
      * @var string
      */
     protected $isbn10;
 
     /**
-     * @ORM\Column(name="LB_isbnThirteen", type="string", length="14", nullable=false)
+     * @ORM\Column(name="LB_isbnThirteen", type="string", length=14, nullable=false)
      *
      * @var string
      */
     protected $isbn13;
 
     /**
-     * @ORM\Column(name="LB_title", type="string", length="100", nullable=false)
+     * @ORM\Column(name="LB_title", type="string", length=100, nullable=false)
      *
      * @var string
      */
     protected $title;
 
     /**
-     * @ORM\ManyToMany(targetEntity="author", inversedBy="authors")
-     * @JoinTable(name="lb_author")
+     * @ORM\ManyToMany(targetEntity="Author", inversedBy="authors")
+     * @ORM\JoinTable(name="lb_author")
      *
      * @var string
      */
     protected $authors;
 
     /**
-     * @ORM\Column(name="LB_publisher", type="string", length="100")
+     * @ORM\Column(name="LB_publisher", type="string", length=100)
      *
      * @var string
      */
     protected $publisher;
 
     /**
-     * @ORM\Column(name="LB_publisher", type="string", length="500")
+     * @ORM\Column(name="LB_description", type="string", length=500)
      *
      * @var string
      */
     protected $description;
 
     /**
-     * @ORM\Column(name="LB_publisher", type="integer")
+     * @ORM\Column(name="LB_pages", type="integer")
      *
      * @var string
      */
     protected $pageCount;
 
     /**
-     * @ORM\Column(name="LB_publisher", type="string", length="50")
+     * @ORM\Column(name="LB_imageLink", type="string", length=50)
      *
      * @var string
      */
