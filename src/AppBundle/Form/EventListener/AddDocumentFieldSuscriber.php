@@ -9,10 +9,13 @@
 
 namespace AppBundle\Form\EventListener;
 
+use Proxies\__CG__\AppBundle\Entity\Api;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Doctrine\ORM\EntityRepository;
+use AppBundle\Entity\Document;
 
 class AddDocumentFieldSuscriber implements EventSubscriberInterface
 {
@@ -37,33 +40,49 @@ class AddDocumentFieldSuscriber implements EventSubscriberInterface
     private function addDocumentForm($form, $document)
     {
 
-       /* $form->add($this->factory->createNamed('files', 'choice', null, array(
+        $form->add($this->factory->createNamed('files', 'choice', null, array(
             'empty_value' => 'Empty',
             'auto_initialize' => false,
-            'choices' => ['Files' => $qb]
+            'query_builder' => function (EntityRepository $repository) use ($document) {
+                $qb = $repository->createQueryBuilder('documents');
+                if ($document instanceof Document) {
+                    $qb->where('document.doc_name = :document')
+                        ->setParameter('document', $document->getName());
+                } elseif (is_numeric($document)) {
+                    $qb->where('document.doc_id = :document')
+                        ->setParameter('document', $document);
+                } else {
+                    $qb->where('document.name = :document')
+                        ->setParameter('document', null);
+                }
+                return $qb;
+            }
         )));
-        /*$form->add($this->factory->createNamed('files', 'choice', null, [
-            'choices' => ['Files' => $document],
-            'label' => 'Files',
-        ]));*/
     }
 
     public function preSetData(FormEvent $event) {
         $data = $event->getData();
+
         $form = $event->getForm();
+
         if (null === $data) {
             return;
         }
-        $document = array_key_exists('files', $data) ? $data['files'] : null;
+
+        $document =  ($data->getDocument()) ? $data->getDocument() : null;
+
         $this->addDocumentForm($form, $document);
     }
 
     public function preBind(FormEvent $event) {
         $data = $event->getData();
+
         $form = $event->getForm();
+
         if (null === $data) {
             return;
         }
+
         $document = array_key_exists('files', $data) ? $data['files'] : null;
 
         $this->addDocumentForm($form, $document);

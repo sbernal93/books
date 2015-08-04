@@ -11,50 +11,51 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Validator\Constraints\Form;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints;
 use AppBundle\Form\EventListener\AddDocumentFieldSuscriber;
+use Doctrine\ORM\EntityManager;
 
 class DownloadType extends AbstractType
 {
 
-    protected $files;
+    protected $entityManager;
 
 
-    public function __construct($files)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->files=$files;
+        $this->entityManager=$entityManager;
 
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /*$factory = $builder->getFormFactory();
-        $documentSuscriber = new AddDocumentFieldSuscriber($factory, $this->app);
-        $builder->addEventSubscriber($documentSuscriber);*/
+        $factory = $builder->getFormFactory();
+        $documentSuscriber = new AddDocumentFieldSuscriber($factory);
+        $builder->addEventSubscriber($documentSuscriber);
 
-        /*$builder
-            ->add('download', 'submit', ['label' => 'Descargar'])
-        ;*/
         $builder
             ->add('files', 'choice', [
-                'choices' => ['Files' => 'asd'],
-                'label' => 'Files',
+                'choices' => ['Files' => $this->fillDocumentChoice()],
+                'label' => 'Archivos: ',
             ])
             ->add('download', 'submit', ['label' => 'Descargar'])
         ;
-        /*$builder
-            ->addEventListener(FormEvents::PRE_SET_DATA,
-                function(FormEvent $event){
-                    $form = $event->getForm();
-                    $data =  $event->getData();
-                    $form
-                    ->add('files', 'choice', [
-                        'choices' => ['Files' => $data],
-                        'label' => 'Files',
-                    ]);
-                });*/
+    }
+
+    public function fillDocumentChoice()
+    {
+        $documentRepository = $this->entityManager->getRepository('AppBundle:Document');
+
+        $documents = $documentRepository->findAll();
+
+        $documentArray = array();
+
+        foreach($documents as $document)
+        {
+            $documentArray[$document->getName()] = $document->getName();
+        }
+
+        return $documentArray;
     }
 
     /**
