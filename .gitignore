@@ -28,6 +28,7 @@
 # Misc.
 .DS_Store
 .php_cs.cache
+.xlsx
 /npm-debug.log
 
 #vm
