@@ -8,6 +8,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Interfaces\AdapterInterface;
+use AppBundle\Model\Constants;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -113,6 +115,21 @@ class Api
     public function setAdapterName($adapterName)
     {
         $this->adapterName = $adapterName;
+    }
+
+    /**
+     * @param null $apiKey
+     *
+     * @return AdapterInterface
+     */
+    public function buildAdapterClass($apiKey = null)
+    {
+        $class = 'AppBunde\\Adapter\\' . $this->adapterName;
+        if (is_null($apiKey))
+        {
+            return new $class();
+        }
+        return new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $apiKey]);
     }
 
 

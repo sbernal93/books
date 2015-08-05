@@ -18,13 +18,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="author")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\AuthorRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\AuthorsRepository")
  * @UniqueEntity("name")
  */
 class Author
 {
     /**
-     * @ORM\Column(name="LB_id", type="integer")
+     * @ORM\Column(name="auth_id", type="integer")
      * @ORM\id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *

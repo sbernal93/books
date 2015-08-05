@@ -10,7 +10,24 @@ namespace AppBundle\Repository\Doctrine\Orm;
 
 use AppBundle\Interfaces\Repository\BooksRepositoryInterface;
 
-class BookRepository extends AbstractBaseRepository implements BooksRepositoryInterface
+class BooksRepository extends AbstractBaseRepository implements BooksRepositoryInterface
 {
+    /**
+     * @param array $isbns
+     *
+     * @return array
+     */
+    public function findISBNSNotInDatabase(array $isbns)
+    {
+        $isbnsNotFound = [];
 
+        foreach ($isbns as $isbn)
+        {
+            if (!$this->findBy(array('isbn13' => $isbn)))
+            {
+                $isbnsNotFound[] = $isbn;
+            }
+        }
+        return $isbnsNotFound;
+    }
 }

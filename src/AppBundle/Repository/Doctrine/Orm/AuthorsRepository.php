@@ -8,8 +8,9 @@
 
 namespace AppBundle\Repository\Doctrine\Orm;
 
-use AppBundle\Interfaces\Repository\DocumentsRepositoryInterface;
+use AppBundle\Interfaces\Repository\AuthorsRepositoryInterface;
 
-class AuthorsRepository extends AbstractBaseRepository implements DocumentsRepositoryInterface
+class AuthorsRepository extends AbstractBaseRepository implements AuthorsRepositoryInterface
 {
+
 }

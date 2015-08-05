@@ -12,4 +12,10 @@ use AppBundle\Interfaces\RepositoryInterface;
 
 interface DocumentsRepositoryInterface extends RepositoryInterface
 {
+    /**
+     * @param $filename
+     * @param array $isbns
+     * @return mixed
+     */
+    public function saveFilesWithIsbns($filename, array $isbns);
 }

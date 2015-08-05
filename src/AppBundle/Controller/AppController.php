@@ -10,6 +10,13 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
+use AppBundle\Entity\Api;
+use AppBundle\Model\Constants;
+use AppBundle\Model\MessageBuilder;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -20,6 +27,9 @@ use AppBundle\Form\Type\FindType;
 use AppBundle\Form\Type\DownloadType;
 use AppBundle\Form\Type\UploadType;
 use AppBundle\Repository\Doctrine\Orm\ApiRepository;
+use AppBundle\Exception\BookNotFoundException;
+use AppBundle\Interfaces\AdapterInterface;
+use AppBundle\DocumentWorker\ExcelWorker;
 
 /**
  * Class AppController
@@ -37,12 +47,11 @@ class AppController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $apis = $em->getRepository('AppBundle:Api')->findAll();
-        $documents = $em->getRepository('AppBundle:Document')->findAll();
-        $form = $this->createForm(new FindType($apis))->createView();
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(new FindType($entityManager))->createView();
         $upload = $this->createForm(new UploadType())->createView();
-        $download = $this->createForm(new DownloadType($documents))->createView();
+        $download = $this->createForm(new DownloadType($entityManager))->createView();
 
         return $this->render('books/index.html.twig', [
             'form' => $form, 'upload' => $upload, 'download' => $download
@@ -55,9 +64,46 @@ class AppController extends Controller
      *
      * @return JsonResponse
      */
-    public function findOneBook()
+    public function findOneBook(Request $request)
     {
+        try {
+            $entityManager = $this->getDoctrine()->getManager();
 
+            $form = $this->createForm(new FindType($entityManager));
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                $apiRepository = $entityManager->getRepository('AppBundle:Api');
+                $apis = $apiRepository->findAll();
+                $apiInfo = new Api();
+
+                foreach($apis as $api)
+                {
+                    if($api->getName() == $data['api'])
+                    {
+                        $apiInfo = $api;
+                    }
+                }
+
+                //$adapter = $apiInfo->buildAdapterClass($apiInfo->getKey());
+                $class = 'AppBundle\\Adapter\\' . $apiInfo->getAdapterName();
+                $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $apiInfo->getKey()]);
+
+                $book = $adapter->findOne($data['isbn']);
+                if ($request->isXmlHttpRequest()) {
+
+                    return new JsonResponse( MessageBuilder::getFindOneBookReturnMessage($book));
+                } else {
+
+                    return $this->render('books/show.html.twig', ['books' => $book]);
+                }
+            }
+        }
+        catch (BookNotFoundException $e)
+        {
+            return new JsonResponse(MessageBuilder::getBookNotFoundExceptionMessage());
+        }
     }
 
     /**
@@ -66,9 +112,75 @@ class AppController extends Controller
      *
      * @return JsonResponse
      */
-    public function uploadDocument()
+    public function uploadDocument(Request $request)
     {
+        try {
+            ini_set('max_execution_time', 100000);
+            $upload = $this->createForm(new UploadType());
+            $upload->handleRequest($request);
 
+            if ($upload->isValid()) {
+                $file = $request->files->get($upload->getName());
+
+                $path = $this->get('kernel')->getRootDir() . '/../web/upload' . $this->getRequest()->getBasePath();
+                $path = $path .'/';
+
+                $filename = $file['file']->getClientOriginalName();
+
+                $excelWorker = new ExcelWorker();
+                $isbns = $excelWorker->getISBNSFromDocument($file, $path, $filename);
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $apiRepository = $entityManager->getRepository('AppBundle:Api');
+                $documentRepository = $entityManager->getRepository('AppBundle:Document');
+                $bookRepository = $entityManager->getRepository('AppBundle:Book');
+
+                $isbnsNotFound = $bookRepository->findISBNSNotInDatabase($isbns);
+
+                $apiArray = $apiRepository->findAll();
+                $count = 0;
+                $booksFound = [];
+                foreach($apiArray as $api)
+                {
+                    if (!is_null($isbnsNotFound))
+                    {
+                        $class = 'AppBundle\\Adapter\\' . $api->getAdapterName();
+                        $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $api->getKey()]);
+                        $booksFound = $adapter->find($isbnsNotFound);
+                    }
+
+                    $authorsRepository = $entityManager->getRepository('AppBundle:Author');
+
+                    foreach($booksFound as $book)
+                    {
+                        if(!$bookRepository->findBy(array('isbn13' => $book->getIsbn13()))) {
+                            $author = $authorsRepository->findBy(array('name' => $book->getAuthors()));
+                            $authorcol = new ArrayCollection($author);
+                            $book->setAuthors($authorcol);
+
+                            $bookRepository->add($book);
+                        }
+
+                    }
+
+                    $count++;
+                    //TODO: Update the isbnsNotFound Array with the isbns that where found
+                }
+
+                $filename= trim($filename,".xlsx") . time() . ".xlsx";
+                $documentRepository->saveFilesWithIsbns($filename, $isbns);
+
+                return new JsonResponse(MessageBuilder::getUploaderReturnMessage($filename));
+            } else {
+                return new JsonResponse(
+                    json_encode(['response' => 'File is invalid!', 'errors' => MessageBuilder::getFormErrorMessages($upload)])
+                );
+            }
+        }
+        catch (Exception $e)
+        {
+            return new JsonResponse($e->getMessage());
+        }
     }
 
     /**

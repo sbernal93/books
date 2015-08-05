@@ -18,17 +18,18 @@ class ExcelWorker implements DocumentWorkerInterface
     /**
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct(array $config = null)
     {
 
     }
 
     /**
      * @param $filename
+     * @param array $info
      *
      * @return PHPExcel
      */
-    public function createDocument($filename, array $info)
+    public function createDocument($filename, array $info = null)
     {
         $phpExcel = new PHPExcel();
         $phpExcel->getProperties()->setCreator(($info['creator']) ? $info['creator'] : Constants::EXCEL_CREATOR)

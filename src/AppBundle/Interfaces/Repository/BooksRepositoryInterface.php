@@ -12,6 +12,11 @@ use AppBundle\Interfaces\RepositoryInterface;
 
 interface BooksRepositoryInterface extends RepositoryInterface
 {
-
+    /**
+     * @param array $isbns
+     *
+     * @return array
+     */
+    public function findISBNSNotInDatabase(array $isbns);
 
 }

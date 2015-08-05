@@ -8,9 +8,13 @@
  */
 namespace AppBundle\Entity;
 
+use AppBundle\AppBundle;
+use AppBundle\Model\Constants;
+use AppBundle\Entity\Author;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Tests\Fixtures\Entity;
 
 /**
  * Class Book
@@ -18,7 +22,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @package AppBundle\Entity
  *
  * @ORM\Table(name="linio_books")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\BookRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Doctrine\Orm\BooksRepository")
  * @UniqueEntity("isbn10")
  * @UniqueEntity("isbn13")
  *
@@ -55,10 +59,13 @@ class Book
     protected $title;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Author", inversedBy="authors")
-     * @ORM\JoinTable(name="lb_author")
+     * @ORM\ManyToMany(targetEntity="Author", inversedBy="author")
+     * @ORM\JoinTable(name="lb_author",
+     *              joinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="book_id")},
+     *              inverseJoinColumns={@ORM\JoinColumn(name="auth_id_fk", referencedColumnName="auth_id")}
+     *              )
      *
-     * @var string
+     * @var ArrayCollection
      */
     protected $authors;
 
@@ -205,7 +212,7 @@ class Book
     }
 
     /**
-     * @return string
+     * @return ArrayCollection
      */
     public function getAuthors()
     {
@@ -213,16 +220,18 @@ class Book
     }
 
     /**
-     * @param string $authors
+     * @param ArrayCollection $authors
      */
     public function setAuthors($authors)
     {
         if (is_null($authors))
         {
-            $this->authors = "N/A";
+            $author = new Author();
+            $author->setName('N/A');
+            $this->authors = $author;
         }
         else {
-            $this->authors = trim($authors,"'");
+            $this->authors = $authors;
         }
     }
 

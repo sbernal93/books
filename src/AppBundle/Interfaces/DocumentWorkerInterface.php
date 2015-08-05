@@ -13,7 +13,7 @@ interface DocumentWorkerInterface
     /**
      * @param array $config
      */
-    public function __construct(array $config);
+    public function __construct(array $config = null);
 
     /**
      * @param $filename
@@ -21,7 +21,7 @@ interface DocumentWorkerInterface
      *
      * @return mixed
      */
-    public function createDocument($filename, array $info);
+    public function createDocument($filename, array $info=null);
 
     /**
      * @param array $info

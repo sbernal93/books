@@ -44,10 +44,10 @@ class Document
      * @ORM\ManyToMany(targetEntity="Book")
      * @ORM\JoinTable(name="lb_doc",
      *                  joinColumns={@ORM\JoinColumn(name="doc_id_fk", referencedColumnName="doc_id")},
-     *                  inverseJoinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="lb_id")}
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="book_id")}
      *               )
      *
-     * @var array
+     * @var ArrayCollection
      */
     protected $books;
 
@@ -93,7 +93,7 @@ class Document
     }
 
     /**
-     * @return array
+     * @return ArrayCollection
      */
     public function getBooks()
     {
@@ -101,11 +101,18 @@ class Document
     }
 
     /**
-     * @param array $books
+     * @param Book $book
      */
-    public function setBooks($books)
+    public function addBook(Book $book)
     {
-        $this->books = $books;
+        $this->books->add($book);
+    }
+    /**
+     * @param Book $book
+     */
+    public function removeBook(Book $book)
+    {
+        $this->books->removeElement($book);
     }
 
 
