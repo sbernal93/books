@@ -226,4 +226,33 @@ class AppController extends Controller
             return new JsonResponse($e->getMessage());
         }
     }
+
+    /**
+     * @Route("/refreshCombo")
+     * @Method("GET")
+     *
+     * @return JsonResponse
+     */
+    public function refreshCombo()
+    {
+        try
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+            $documentRepository = $entityManager->getRepository('AppBundle:Document');
+            $docArray = $documentRepository->findAll();
+
+            $docNameArray = [];
+
+            foreach($docArray as $doc)
+            {
+                $docNameArray[] = $doc->getName();
+            }
+
+            return new JsonResponse($docNameArray);
+        }
+        catch(Exception $e)
+        {
+            return new JsonResponse($e->getMessage());
+        }
+    }
 }
