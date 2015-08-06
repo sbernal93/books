@@ -30,14 +30,23 @@ class DocumentsRepository extends AbstractBaseRepository implements DocumentsRep
             $file = new Document();
 
             $file->setName($filename);
+            $bookArray = [];
             foreach ($isbns as $isbn)
             {
                 $bookRepo = $this->_em->getRepository('AppBundle:Book');
                 $book = $bookRepo->findBy(array('isbn13' => $isbn));
+
                 if (!is_null($book) && array_key_exists(0, $book)) {
-                    $file->addBook($book[0]);
+                    $bookArray[] = $book[0];
+                    //$file->addBook($book[0]);
                 }
 
+            }
+            $bookArray = $this->deleteRepeatedBooksInArray($bookArray);
+
+            foreach($bookArray as $book)
+            {
+                $file->addBook($book);
             }
 
             $this->add($file);
@@ -45,6 +54,20 @@ class DocumentsRepository extends AbstractBaseRepository implements DocumentsRep
             return true;
         }
         return false;
+    }
+
+    public function deleteRepeatedBooksInArray($bookArray)
+    {
+        $bookArrayWithoutRepeat = [];
+
+        foreach($bookArray as $book)
+        {
+            if (!in_array($book, $bookArrayWithoutRepeat))
+            {
+                $bookArrayWithoutRepeat[] = $book;
+            }
+        }
+        return $bookArrayWithoutRepeat;
     }
 
     /**
