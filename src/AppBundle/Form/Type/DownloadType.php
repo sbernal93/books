@@ -29,9 +29,9 @@ class DownloadType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $factory = $builder->getFormFactory();
+        /*$factory = $builder->getFormFactory();
         $documentSuscriber = new AddDocumentFieldSuscriber($factory);
-        $builder->addEventSubscriber($documentSuscriber);
+        $builder->addEventSubscriber($documentSuscriber);*/
 
         $builder
             ->add('files', 'choice', [

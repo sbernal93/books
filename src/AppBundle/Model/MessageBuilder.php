@@ -69,4 +69,9 @@ class MessageBuilder
     {
         return '<strong>No se consigui&oacute; el libro buscado</strong>';
     }
+
+    public static function getDocumentNotFoundExceptionMessage()
+    {
+        return '<strong>No se consigui$oacute; el documento buscado</strong>';
+    }
 }

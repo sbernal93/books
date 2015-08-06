@@ -52,4 +52,20 @@ class Constants
     const EXCEL_CELL_H1                 =   'Imagen';
     const EXCEL_DOWNLOAD_LOCATION       =   'http://books.linio/upload/';
 
+    /**
+     * ################################################################################################################
+     *                                          Book table database info
+     * ################################################################################################################
+     */
+    const BOOK_TABLE                    =   'linio_books';
+    const BOOK_ID                       =   'LB_id';
+    const BOOK_ISBN10                   =   'LB_isbnTen';
+    const BOOK_ISBN13                   =   'LB_isbnThirteen';
+    const BOOK_TITLE                    =   'LB_title';
+    const BOOK_PUBLISHER                =   'LB_publisher';
+    const BOOK_DESCRIPTION              =   'LB_description';
+    const BOOK_NUMPAGES                 =   'LB_pages';
+    const BOOK_IMAGELINK                =   'LB_imageLink';
+    const AUTHOR_NAME                   =   'auth_name';
+
 }

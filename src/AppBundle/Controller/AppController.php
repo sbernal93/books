@@ -12,6 +12,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\AppBundle;
 use AppBundle\Entity\Api;
+use AppBundle\Entity\Document;
+use AppBundle\Exception\DocumentNotFoundException;
 use AppBundle\Model\Constants;
 use AppBundle\Model\MessageBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -75,20 +77,10 @@ class AppController extends Controller
                 $data = $form->getData();
 
                 $apiRepository = $entityManager->getRepository('AppBundle:Api');
-                $apis = $apiRepository->findAll();
-                $apiInfo = new Api();
+                $apiInfo = $apiRepository->findBy(array('name' =>  $data['api']));
 
-                foreach($apis as $api)
-                {
-                    if($api->getName() == $data['api'])
-                    {
-                        $apiInfo = $api;
-                    }
-                }
-
-                //$adapter = $apiInfo->buildAdapterClass($apiInfo->getKey());
-                $class = 'AppBundle\\Adapter\\' . $apiInfo->getAdapterName();
-                $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $apiInfo->getKey()]);
+                $class = 'AppBundle\\Adapter\\' . $apiInfo[0]->getAdapterName();
+                $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $apiInfo[0]->getKey()]);
 
                 $book = $adapter->findOne($data['isbn']);
                 if ($request->isXmlHttpRequest()) {
@@ -189,8 +181,49 @@ class AppController extends Controller
      *
      * @return JsonResponse
      */
-    public function downloadDocument()
+    public function downloadDocument(Request $request)
     {
+        try
+        {
+            ini_set('max_execution_time', 100000);
 
+            $entityManager = $this->getDoctrine()->getManager();
+
+
+            $downloadForm = $this->createForm(new DownloadType($entityManager));
+            $downloadForm->handleRequest($request);
+            //$download->bind($request);
+
+            if ($downloadForm->isValid()){
+                $data = $downloadForm->getData();
+                $documentRepository = $entityManager->getRepository('AppBundle:Document');
+
+                $docInfo = $documentRepository->findBy(array('name' => $data['files']));
+
+                $books = $documentRepository->getBooksFromDocument($docInfo[0]->getName());
+
+                $excel = new ExcelWorker();
+
+                $path = $this->get('kernel')->getRootDir() . '/../web/upload' . $this->getRequest()->getBasePath();
+                $path = $path .'/';
+
+                $phpExcel = $excel->createDocument($docInfo[0]->getName());
+                $excel->fillDocument($books, $phpExcel, $docInfo[0]->getName(), $path);
+
+                return new JsonResponse(Constants::EXCEL_DOWNLOAD_LOCATION . $docInfo[0]->getName());
+            } else {
+                return new JsonResponse(
+                    json_encode(['response' => 'File is invalid!', 'errors' => MessageBuilder::getFormErrorMessages($downloadForm)])
+                );
+            }
+        }
+        catch(DocumentNotFoundException $e)
+        {
+            return new JsonResponse(MessageBuilder::getDocumentNotFoundExceptionMessage());
+        }
+        catch (Exception $e)
+        {
+            return new JsonResponse($e->getMessage());
+        }
     }
 }
