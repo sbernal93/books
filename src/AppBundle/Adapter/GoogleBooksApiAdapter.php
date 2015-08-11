@@ -38,6 +38,15 @@ class GoogleBooksApiAdapter implements AdapterInterface
         $this->params[Constants::GOOGLE_BOOKS_LABEL_LANGRES] = Constants::GOOGLE_BOOKS_LANGRESTRICT;
     }
 
+    /**
+     * Searches for a book in the Google Books API by using its isbn
+     *
+     * @param $isbn
+     * @return Book
+     *
+     * @throws ApiException
+     * @throws BookNotFoundException
+     */
     public function findOne($isbn)
     {
         try {
@@ -56,6 +65,13 @@ class GoogleBooksApiAdapter implements AdapterInterface
         }
     }
 
+    /**
+     * Finds a book array from an isbn array using the Google Books API
+     *
+     * @param array $isbns
+     *
+     * @return array
+     */
     public function find(array &$isbns)
     {
         $data = [];

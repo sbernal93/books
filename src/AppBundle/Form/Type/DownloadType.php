@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Santiago
- * Date: 7/17/2015
- * Time: 12:28 PM
- */
 
 namespace AppBundle\Form\Type;
 
@@ -15,18 +9,30 @@ use Symfony\Component\Validator\Constraints;
 use AppBundle\Form\EventListener\AddDocumentFieldSuscriber;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Class DownloadType
+ *
+ * @package AppBundle\Form\Type
+ */
 class DownloadType extends AbstractType
 {
 
     protected $entityManager;
 
 
+    /**
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager=$entityManager;
 
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /*$factory = $builder->getFormFactory();
@@ -42,6 +48,11 @@ class DownloadType extends AbstractType
         ;
     }
 
+    /**
+     * Gets documents array from database
+     *
+     * @return array
+     */
     public function fillDocumentChoice()
     {
         $documentRepository = $this->entityManager->getRepository('AppBundle:Document');

@@ -24,6 +24,8 @@ class ExcelWorker implements DocumentWorkerInterface
     }
 
     /**
+     * Creates an Excel document and fills the first row with data
+     *
      * @param $filename
      * @param array $info
      *
@@ -66,6 +68,8 @@ class ExcelWorker implements DocumentWorkerInterface
     }
 
     /**
+     * Fills an Excel Document with the data from each book in a book array
+     *
      * @param array $info
      * @param PHPExcel $file
      * @param string $filename
@@ -95,6 +99,8 @@ class ExcelWorker implements DocumentWorkerInterface
     }
 
     /**
+     * Gets the ISBNS from an Excel document
+     *
      * @param $file
      * @param $path
      * @param $filename

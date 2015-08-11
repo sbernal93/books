@@ -7,12 +7,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints;
 
 /**
- * Description of UploadType.
+ * Class UploadType
  *
- * @author recchia
+ * @package AppBundle\Form\Type
  */
 class UploadType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,6 +35,11 @@ class UploadType extends AbstractType
         ;
     }
 
+    /**
+     * Gets Form name
+     *
+     * @return string
+     */
     public function getName()
     {
         return 'upload_form';

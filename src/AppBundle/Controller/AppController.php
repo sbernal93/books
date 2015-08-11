@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Santiago
- * Date: 7/31/2015
- * Time: 8:59 AM
- */
-
-
 namespace AppBundle\Controller;
 
 use AppBundle\AppBundle;
@@ -44,7 +36,10 @@ class AppController extends Controller
 {
 
     /**
+     * Gets home page and loads the Form types
+     *
      * @Route("/")
+     *
      * @Method("GET")
      */
     public function indexAction()
@@ -61,7 +56,10 @@ class AppController extends Controller
     }
 
     /**
+     * Finds a book in the selected API
+     *
      * @Route("/find")
+     *
      * @Method("POST")
      *
      * @return JsonResponse
@@ -99,7 +97,10 @@ class AppController extends Controller
     }
 
     /**
+     * Searches for books in the uploaded document and stores the info in the database
+     *
      * @Route("/upload")
+     *
      * @Method("POST")
      *
      * @return JsonResponse
@@ -172,7 +173,10 @@ class AppController extends Controller
     }
 
     /**
+     * Sends the selected document to the user
+     *
      * @Route("/download")
+     *
      * @Method("POST")
      *
      * @return JsonResponse
@@ -224,7 +228,10 @@ class AppController extends Controller
     }
 
     /**
+     * Refreshes the download combo box
+     *
      * @Route("/refreshCombo")
+     *
      * @Method("GET")
      *
      * @return JsonResponse

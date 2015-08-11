@@ -8,20 +8,28 @@ use Symfony\Component\Validator\Constraints;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Api;
 
+
 /**
- * Description of SearchForm.
+ * Class FindType
  *
- * @author recchia
+ * @package AppBundle\Form\Type
  */
 class FindType extends AbstractType
 {
     protected $entityManager;
 
+    /**
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -44,6 +52,11 @@ class FindType extends AbstractType
             ->add('search', 'submit', ['label' => 'Buscar']);
     }
 
+    /**
+     * Gets all the API options from the database
+     *
+     * @return array
+     */
     public function fillApiChoice()
     {
         $apiRepository = $this->entityManager->getRepository('AppBundle:Api');
@@ -60,6 +73,11 @@ class FindType extends AbstractType
         return $apiArray;
     }
 
+    /**
+     * Gets Form name
+     *
+     * @return string
+     */
     public function getName()
     {
         return 'find_form';

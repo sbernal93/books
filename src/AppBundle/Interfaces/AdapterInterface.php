@@ -4,6 +4,11 @@ namespace AppBundle\Interfaces;
 
 use AppBundle\Exception\BookNotFoundException;
 
+/**
+ * Interface AdapterInterface
+ *
+ * @package AppBundle\Interfaces
+ */
 interface AdapterInterface
 {
     /**

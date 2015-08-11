@@ -26,7 +26,7 @@ interface DocumentWorkerInterface
     /**
      * @param array $info
      * @param $file
-     * @param       $filename
+     * @param $filename
      * @param $path
      *
      * @return mixed
