@@ -84,9 +84,7 @@ class GoogleBooksApiAdapter implements AdapterInterface
         }
         catch(Exception $e)
         {
-            //The reason for this is if the api limit is exceeded then this will still return some
-            //of the data found without loosing that information
-            //TODO: catch specific exception, set global variable that will inform the system that the api limit is exceeded
+            //TODO: catch specific exception
             return $data;
         }
 

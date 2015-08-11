@@ -44,7 +44,7 @@ class Document
      * @ORM\ManyToMany(targetEntity="Book")
      * @ORM\JoinTable(name="lb_doc",
      *                  joinColumns={@ORM\JoinColumn(name="doc_id_fk", referencedColumnName="doc_id")},
-     *                  inverseJoinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="book_id")}
+     *                  inverseJoinColumns={@ORM\JoinColumn(name="lb_id_fk", referencedColumnName="LB_id")}
      *               )
      *
      * @var ArrayCollection
