@@ -130,7 +130,6 @@ class AppController extends Controller
                 $isbnsNotFound = $bookRepository->findISBNSNotInDatabase($isbns);
 
                 $apiArray = $apiRepository->findAll();
-                $count = 0;
                 $booksFound = [];
                 foreach($apiArray as $api)
                 {
@@ -140,23 +139,20 @@ class AppController extends Controller
                         $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $api->getKey()]);
                         $booksFound = $adapter->find($isbnsNotFound);
                     }
+                }
 
-                    $authorsRepository = $entityManager->getRepository('AppBundle:Author');
+                $authorsRepository = $entityManager->getRepository('AppBundle:Author');
 
-                    foreach($booksFound as $book)
-                    {
-                        if(!$bookRepository->findBy(array('isbn13' => $book->getIsbn13()))) {
-                            $author = $authorsRepository->findBy(array('name' => $book->getAuthors()));
-                            $authorcol = new ArrayCollection($author);
-                            $book->setAuthors($authorcol);
+                foreach($booksFound as $book)
+                {
+                    if(!$bookRepository->findBy(array('isbn13' => $book->getIsbn13()))) {
+                        $author = $authorsRepository->findBy(array('name' => $book->getAuthors()));
+                        $authorcol = new ArrayCollection($author);
+                        $book->setAuthors($authorcol);
 
-                            $bookRepository->add($book);
-                        }
-
+                        $bookRepository->add($book);
                     }
 
-                    $count++;
-                    //TODO: Update the isbnsNotFound Array with the isbns that where found
                 }
 
                 $filename= trim($filename,".xlsx") . time() . ".xlsx";

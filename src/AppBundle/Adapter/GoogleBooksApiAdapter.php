@@ -56,9 +56,10 @@ class GoogleBooksApiAdapter implements AdapterInterface
         }
     }
 
-    public function find(array $isbns)
+    public function find(array &$isbns)
     {
         $data = [];
+        $isbnsNotFound = [];
         try {
             if (is_array($isbns)) {
 
@@ -71,8 +72,13 @@ class GoogleBooksApiAdapter implements AdapterInterface
                         $book = $this->buildBookWithApiInfo($volumeInfo);
                         $data[] = $book;
                     }
+                    else
+                    {
+                        $isbnsNotFound[] = $isbn;
+                    }
                 }
 
+                $isbns = $isbnsNotFound;
                 return $data;
             }
         }

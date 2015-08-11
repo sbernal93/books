@@ -2,6 +2,8 @@
 
 namespace AppBundle\Interfaces;
 
+use AppBundle\Exception\BookNotFoundException;
+
 interface AdapterInterface
 {
     /**
@@ -23,5 +25,5 @@ interface AdapterInterface
      *
      * @return array
      */
-    public function find(array $isbns);
+    public function find(array &$isbns);
 }
