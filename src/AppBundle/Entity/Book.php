@@ -31,7 +31,7 @@ class Book
 {
     /**
      * @ORM\Column(name="LB_id", type="integer")
-     * @ORM\id
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int

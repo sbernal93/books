@@ -26,7 +26,7 @@ class Document
 {
     /**
      * @ORM\Column(name="doc_id", type="integer")
-     * @ORM\id
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int

@@ -25,7 +25,7 @@ class Author
 {
     /**
      * @ORM\Column(name="auth_id", type="integer")
-     * @ORM\id
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int

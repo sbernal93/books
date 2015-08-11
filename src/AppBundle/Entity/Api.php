@@ -26,7 +26,7 @@ class Api
 {
     /**
      * @ORM\Column(name="BA_id", type="integer")
-     * @ORM\id
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @var int
      */
