@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Santiago
- * Date: 7/31/2015
- * Time: 9:45 AM
- */
 
 namespace AppBundle\Repository\Doctrine\Orm;
 
@@ -16,14 +10,21 @@ use AppBundle\Entity\Document;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Model\Constants;
 
+/**
+ * Class DocumentsRepository
+ *
+ * @package AppBundle\Repository\Doctrine\Orm
+ */
 class DocumentsRepository extends AbstractBaseRepository implements DocumentsRepositoryInterface
 {
     /**
+     * Stores a document and its isbns in the database
+     *
      * @param $filename
      * @param array $isbns
      * @return boolean
      */
-    public function saveFilesWithIsbns($filename, array $isbns)
+    public function saveDocumentWithIsbns($filename, array $isbns)
     {
         if(!is_null($filename && !is_null($isbns)))
         {
@@ -56,6 +57,13 @@ class DocumentsRepository extends AbstractBaseRepository implements DocumentsRep
         return false;
     }
 
+    /**
+     * Deletes repeated books in an array
+     *
+     * @param $bookArray
+     *
+     * @return array
+     */
     public function deleteRepeatedBooksInArray($bookArray)
     {
         $bookArrayWithoutRepeat = [];
@@ -71,8 +79,12 @@ class DocumentsRepository extends AbstractBaseRepository implements DocumentsRep
     }
 
     /**
+     * Gets all the books given a documents name
+     *
      * @param $docName
+     *
      * @return array
+     *
      * @throws DocumentNotFoundException
      */
     public function getBooksFromDocument($docName)

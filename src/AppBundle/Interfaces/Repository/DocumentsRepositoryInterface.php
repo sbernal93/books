@@ -17,7 +17,7 @@ interface DocumentsRepositoryInterface extends RepositoryInterface
      * @param array $isbns
      * @return boolean
      */
-    public function saveFilesWithIsbns($filename, array $isbns);
+    public function saveDocumentWithIsbns($filename, array $isbns);
 
     /**
      * @param $docName

@@ -1,21 +1,24 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Santiago
- * Date: 8/4/2015
- * Time: 10:39 AM
- */
-
-
-
 namespace AppBundle\Model;
 
 use Symfony\Component\Form\Form;
 use AppBundle\Entity\Book;
 
+/**
+ * Class MessageBuilder
+ *
+ * @package AppBundle\Model
+ */
 class MessageBuilder
 {
+    /**
+     * Gets a form error messages
+     *
+     * @param Form $form
+     *
+     * @return array|string
+     */
     public static function getFormErrorMessages(Form $form)
     {
         $errors = [];
@@ -58,6 +61,13 @@ class MessageBuilder
 
     }
 
+    /**
+     * Builds the html return message when uploading a document
+     *
+     * @param $filename
+     *
+     * @return string
+     */
     public static function getUploaderReturnMessage($filename)
     {
         $message = '<strong>Documento guardado como: '. $filename .', lo puede conseguir
@@ -65,11 +75,21 @@ class MessageBuilder
         return $message;
     }
 
+    /**
+     * Builds the html to be shown for the book not found exception
+     *
+     * @return string
+     */
     public static function getBookNotFoundExceptionMessage()
     {
         return '<strong>No se consigui&oacute; el libro buscado</strong>';
     }
 
+    /**
+     * Builds the html to be shown for the document not found exception
+     *
+     * @return string
+     */
     public static function getDocumentNotFoundExceptionMessage()
     {
         return '<strong>No se consigui$oacute; el documento buscado</strong>';
