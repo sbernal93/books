@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Adapter;
+namespace AppBundle\Adapter\Api\Google\Books;
 
 use AppBundle\Interfaces\AdapterInterface;
 use AppBundle\Exception\ApiException;
@@ -12,7 +12,7 @@ use AppBundle\Exception\BookNotFoundException;
 use AppBundle\Model\Constants;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class GoogleBooksApiAdapter implements AdapterInterface
+class Adapter implements AdapterInterface
 {
     /**
      * @var Google_Client

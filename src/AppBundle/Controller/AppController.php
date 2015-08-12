@@ -6,6 +6,7 @@ use AppBundle\AppBundle;
 use AppBundle\Entity\Api;
 use AppBundle\Entity\Document;
 use AppBundle\Exception\DocumentNotFoundException;
+use AppBundle\Factory\AdapterFactory;
 use AppBundle\Model\Constants;
 use AppBundle\Model\MessageBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -77,10 +78,9 @@ class AppController extends Controller
                 $apiRepository = $entityManager->getRepository('AppBundle:Api');
                 $apiInfo = $apiRepository->findBy(array('name' =>  $data['api']));
 
-                $class = 'AppBundle\\Adapter\\' . $apiInfo[0]->getAdapterName();
-                $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $apiInfo[0]->getKey()]);
+                $adapterClass = AdapterFactory::make($apiInfo[0]);
+                $book = $adapterClass->findOne($data['isbn']);
 
-                $book = $adapter->findOne($data['isbn']);
                 if ($request->isXmlHttpRequest()) {
 
                     return new JsonResponse( MessageBuilder::getFindOneBookReturnMessage($book));
@@ -127,6 +127,7 @@ class AppController extends Controller
                 $apiRepository = $entityManager->getRepository('AppBundle:Api');
                 $documentRepository = $entityManager->getRepository('AppBundle:Document');
                 $bookRepository = $entityManager->getRepository('AppBundle:Book');
+                $authorsRepository = $entityManager->getRepository('AppBundle:Author');
 
                 $isbnsNotFound = $bookRepository->findISBNSNotInDatabase($isbns);
 
@@ -136,13 +137,13 @@ class AppController extends Controller
                 {
                     if (!is_null($isbnsNotFound))
                     {
-                        $class = 'AppBundle\\Adapter\\' . $api->getAdapterName();
+                        $adapterClass = AdapterFactory::make($api);
+                        $booksFound = $adapterClass->find($isbnsNotFound);
+                        /*$class = 'AppBundle\\Adapter\\' . $api->getAdapterName();
                         $adapter = new $class([Constants::GOOGLE_BOOKS_LABEL_API_KEY => $api->getKey()]);
-                        $booksFound = $adapter->find($isbnsNotFound);
+                        $booksFound = $adapter->find($isbnsNotFound);*/
                     }
                 }
-
-                $authorsRepository = $entityManager->getRepository('AppBundle:Author');
 
                 foreach($booksFound as $book)
                 {
@@ -157,7 +158,7 @@ class AppController extends Controller
                 }
 
                 $filename= trim($filename,".xlsx") . time() . ".xlsx";
-                $documentRepository->saveFilesWithIsbns($filename, $isbns);
+                $documentRepository->saveDocumentWithIsbns($filename, $isbns);
 
                 return new JsonResponse(MessageBuilder::getUploaderReturnMessage($filename));
             } else {
