@@ -115,8 +115,10 @@ class AppController extends Controller
             if ($upload->isValid()) {
                 $file = $request->files->get($upload->getName());
 
-                $path = $this->get('kernel')->getRootDir() . '/../web/upload' . $this->getRequest()->getBasePath();
-                $path = $path .'/';
+                $path = sprintf('%s/../web/upload%s/',
+                    $this->get('kernel')->getRootDir(),
+                    $this->getRequest()->getBasePath()
+                );
 
                 $filename = $file['file']->getClientOriginalName();
 
@@ -205,8 +207,10 @@ class AppController extends Controller
 
                 $excel = new ExcelWorker();
 
-                $path = $this->get('kernel')->getRootDir() . '/../web/upload' . $this->getRequest()->getBasePath();
-                $path = $path .'/';
+                $path = sprintf('%s/../web/upload%s/',
+                    $this->get('kernel')->getRootDir(),
+                    $this->getRequest()->getBasePath()
+                );
 
                 $phpExcel = $excel->createDocument($docInfo[0]->getName());
                 $excel->fillDocument($books, $phpExcel, $docInfo[0]->getName(), $path);
